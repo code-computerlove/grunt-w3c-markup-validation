@@ -2,6 +2,9 @@
   "name": "grunt-w3c-markup-validation",
   "version": "0.0.1",
   "description": "Grunt task for W3C validation of markup ",
+  "dependencies" : {
+    "w3cjs" : "*"
+  },
   "devDependencies" : {
     "mocha" : "*",
     "chai" : "*",

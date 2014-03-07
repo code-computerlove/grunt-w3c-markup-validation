@@ -1,8 +1,18 @@
 var rewire = require('rewire'),
-	w3cMarkupValidationPlugin = rewire('../tasks/src/markup-validator');
+	W3cMarkupValidationPlugin = rewire('../tasks/src/markup-validator'),
+	fakeLog = {
+	};
 
 require('chai').should();
 
-test('true', function(){
+test('When one file is validated Then w3c validation performed', function(done){
+	var oneFile = ['aFile.html'],
+		mockW3c = {
+			validate : function(){
+				done();
+			}
+		};
+	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
 
+	new W3cMarkupValidationPlugin(fakeLog).validate(oneFile);
 });
