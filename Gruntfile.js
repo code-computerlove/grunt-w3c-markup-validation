@@ -1,5 +1,6 @@
 module.exports = function(grunt) {
-	var message = grunt.option('message') || 'no commit message :(';
+	var message = grunt.option('m') || 'no commit message :(';
+	
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		jshint: {
