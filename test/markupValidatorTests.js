@@ -20,3 +20,23 @@ test('When one file is validated Then w3c validation performed on file by name',
 		files: oneFile
 	});
 });
+
+test('When multiple files are validated Then w3c validation performed on each file by name', function(){
+	var firstFileName = 'random file ' + Math.random(),
+		secondFileName = 'another random ' + Math.random(),
+		multipleFiles = [firstFileName, secondFileName],
+		validatedFiles = [],
+		mockW3c = {
+			validate : function(options){
+				validatedFiles.push(options.file);
+				options.callback();
+			}
+		};
+	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
+
+	new W3cMarkupValidationPlugin(fakeLog).validate({
+		files: multipleFiles
+	});
+	validatedFiles.should.eql(multipleFiles);
+});
+

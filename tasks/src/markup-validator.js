@@ -2,8 +2,13 @@ var w3cValidator = require('w3cjs');
 
 var MarkupValidator = function(){
 	this.validate = function(options){
-		w3cValidator.validate({
-			file : options.files[0]
+		options.files.forEach(function(file){
+			w3cValidator.validate({
+				file : file,
+				callback : function(){
+
+				}
+			});
 		});
 	};
 };
