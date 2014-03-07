@@ -5,20 +5,6 @@ var rewire = require('rewire'),
 
 require('chai').should();
 
-test('When one file is validated Then w3c validation performed', function(done){
-	var oneFile = ['aFile.html'],
-		mockW3c = {
-			validate : function(){
-				done();
-			}
-		};
-	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
-
-	new W3cMarkupValidationPlugin(fakeLog).validate({
-		files: oneFile
-	});
-});
-
 test('When one file is validated Then w3c validation performed on file by name', function(done){
 	var fileName = 'random file ' + Math.random(),
 		oneFile = [fileName],
