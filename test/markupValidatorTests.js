@@ -1,6 +1,14 @@
 var rewire = require('rewire'),
 	W3cMarkupValidationPlugin = rewire('../tasks/src/markup-validator'),
-	fakeLog = {
+	FakeLog = function(){
+		this.errors = [];
+		this.oks = [];
+		this.error = function(error){
+			this.errors.push(error);
+		};
+		this.ok = function(ok){
+			this.oks.push(ok);
+		};
 	};
 
 require('chai').should();
@@ -16,7 +24,7 @@ test('When one file is validated Then w3c validation performed on file by name',
 		};
 	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
 
-	new W3cMarkupValidationPlugin(fakeLog).validate({
+	new W3cMarkupValidationPlugin(new FakeLog()).validate({
 		files: oneFile
 	});
 });
@@ -34,9 +42,35 @@ test('When multiple files are validated Then w3c validation performed on each fi
 		};
 	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
 
-	new W3cMarkupValidationPlugin(fakeLog).validate({
+	new W3cMarkupValidationPlugin(new FakeLog()).validate({
 		files: multipleFiles
 	});
 	validatedFiles.should.eql(multipleFiles);
 });
+
+test('When invalid one file is validated Then error details are added to log', function(){
+	var fileName = 'random file ' + Math.random(),
+		line = Math.random(),
+		message = 'an error ' + Math.random(),
+		oneFile = [fileName],
+		mockW3c = {
+			validate : function(options){
+				options.file.should.equal(fileName);
+				options.callback({
+					messages : [{
+						lastLine : line,
+						message : message
+					}]
+				});
+			}
+		},
+		fakeLog = new FakeLog();
+	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
+
+	new W3cMarkupValidationPlugin(fakeLog).validate({
+		files: oneFile
+	});
+	fakeLog.errors[0].should.equal(fileName + ' | line ' + line + ' | ' + message);
+});
+
 
