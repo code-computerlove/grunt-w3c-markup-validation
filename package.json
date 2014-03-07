@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Grunt task for W3C validation of markup ",
   "devDependencies" : {
+    "mocha" : "*",
+    "chai" : "*",
+    "rewire" : "*", 
     "grunt-cli": "*",
     "grunt-contrib-jshint" : "*",
     "grunt-mocha-test" : "*",
@@ -18,12 +21,18 @@
     "url": "git://github.com/code-computerlove/grunt-w3c-markup-validation.git"
   },
   "keywords": [
-    "grunt", "w3c"
+    "gruntplugin", "w3c"
   ],
+  "engines": {
+    "node": ">= 0.8.0"
+  },
   "author": "iainjmitchell",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/code-computerlove/grunt-w3c-markup-validation/issues"
   },
-  "homepage": "https://github.com/code-computerlove/grunt-w3c-markup-validation"
+  "homepage": "https://github.com/code-computerlove/grunt-w3c-markup-validation",
+  "peerDependencies": {
+    "grunt": "~0.4.2"
+  }
 }
