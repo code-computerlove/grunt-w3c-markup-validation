@@ -15,7 +15,6 @@
     "grunt-git" : "*",
     "grunt-shell" : "*"
   },
-  "main": "Gruntfile.js",
   "scripts": {
     "test": "./node_modules/grunt-cli/bin/grunt test"
   },
@@ -37,5 +36,9 @@
   "homepage": "https://github.com/code-computerlove/grunt-w3c-markup-validation",
   "peerDependencies": {
     "grunt": "~0.4.2"
-  }
+  },
+  "files": [
+    "tasks",
+    "LICENSE"
+  ]
 }
