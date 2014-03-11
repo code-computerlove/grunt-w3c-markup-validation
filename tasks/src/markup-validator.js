@@ -3,9 +3,7 @@ var w3cValidator = require('w3cjs');
 var MarkupValidator = function(log){
 	this.validate = function(options, hasPassedCallback){
 		var pageValidationMonitor = new PageValidationMonitor(options.pages, hasPassedCallback);
-
 		options.pages.forEach(function(pageUriOrFile){
-
 			var webpage = new Webpage(pageUriOrFile, log);
 			webpage.validate(pageValidationMonitor.notify);
 		});
@@ -34,7 +32,7 @@ var Webpage = function(pageUriOrFile, log){
 		w3cValidator.validate({
 			file : pageUriOrFile,
 			callback : function(results){
-				var hasPassed = !results;
+				var hasPassed = results.messages.length === 0;
 				if (!hasPassed){
 					results.messages.forEach(w3cErrorDisplay.show);
 				}

@@ -40,12 +40,12 @@ module.exports = function(grunt) {
 		},
 		w3c_markup_validation : {
 			options : {
-				pages : ['http://www.google.com/']
+				pages : ['./test-pages/passes.html']
 			}
 		}
 	});
 
 	grunt.registerTask('acceptance', ['w3c_markup_validation']);
-	grunt.registerTask('test', ['mochaTest','jshint']);
+	grunt.registerTask('test', ['mochaTest','jshint', 'acceptance']);
 	grunt.registerTask('default',['test','gitcommit', 'shell:git_push']);
 };

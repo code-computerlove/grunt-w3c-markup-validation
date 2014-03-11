@@ -40,7 +40,7 @@ test('When multiple pages are validated Then w3c validation performed on each pa
 		mockW3c = {
 			validate : function(options){
 				validatedPages.push(options.file);
-				options.callback();
+				options.callback({messages : []});
 			}
 		};
 	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
@@ -125,7 +125,7 @@ test('When invalid page is validated And user wants task to fail on error Then t
 test('When valid page is validated Then task does pass', function(done){
 	var mockW3c = {
 			validate : function(options){
-				options.callback();
+				options.callback({messages : []});
 			}
 		};
 	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
@@ -144,7 +144,7 @@ test('When valid page is validated Then task does pass', function(done){
 test('When valid and invalid file is validated And user wants task to fail on error Then task does not pass', function(done){
 	var validPage = 'aValidPage',
 		invalidPage = 'anInvalidPage',
-		validPageResult,
+		validPageResult = {messages : []},
 		invalidPageResult = {messages : [{}]},
 		pageValidationResults = {};
 
