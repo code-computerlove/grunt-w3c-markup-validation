@@ -1,4 +1,4 @@
-var MarkupValidator = require('src/markup-validator');
+var MarkupValidator = require('./src/markup-validator');
 
 module.exports = function(grunt) {
     var markupValidator = new MarkupValidator(grunt.log);

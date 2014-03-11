@@ -1,6 +1,12 @@
 module.exports = function(grunt) {
 	var message = grunt.option('m') || 'no commit message :(';
 	
+	grunt.loadTasks('tasks');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-mocha-test');
+	grunt.loadNpmTasks('grunt-git');
+	grunt.loadNpmTasks('grunt-shell');
+
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		jshint: {
@@ -33,11 +39,6 @@ module.exports = function(grunt) {
 			}
 		}
 	});
-
-	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-mocha-test');
-	grunt.loadNpmTasks('grunt-git');
-	grunt.loadNpmTasks('grunt-shell');
 
 	grunt.registerTask('test', ['mochaTest','jshint']);
 	grunt.registerTask('default',['test','gitcommit', 'shell:git_push']);
