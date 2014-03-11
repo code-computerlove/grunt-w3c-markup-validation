@@ -48,7 +48,7 @@ test('When multiple files are validated Then w3c validation performed on each fi
 	validatedFiles.should.eql(multipleFiles);
 });
 
-test('When invalid one file is validated Then error details are added to log', function(){
+test('When invalid one file is validated And one error Then error details are added to log', function(){
 	var fileName = 'random file ' + Math.random(),
 		line = Math.random(),
 		message = 'an error ' + Math.random(),
@@ -71,6 +71,35 @@ test('When invalid one file is validated Then error details are added to log', f
 		files: oneFile
 	});
 	fakeLog.errors[0].should.equal(fileName + ' | line ' + line + ' | ' + message);
+});
+
+test('When invalid one file is validated And multiple errors Then error details are added to log', function(){
+	var fileName = 'random file ' + Math.random(),
+		line = Math.random(),
+		message = 'an error ' + Math.random(),
+		oneFile = [fileName],
+		error1 = {},
+		mockW3c = {
+			validate : function(options){
+				options.file.should.equal(fileName);
+				options.callback({
+					messages : [
+						error1,
+						{
+							lastLine : line,
+							message : message
+						}
+					]
+				});
+			}
+		},
+		fakeLog = new FakeLog();
+	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
+
+	new W3cMarkupValidationPlugin(fakeLog).validate({
+		files: oneFile
+	});
+	fakeLog.errors[1].should.equal(fileName + ' | line ' + line + ' | ' + message);
 });
 
 

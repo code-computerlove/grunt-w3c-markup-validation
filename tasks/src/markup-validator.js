@@ -16,8 +16,7 @@ var WebPageMarkupValidator = function(pageUriOrFile, log){
 			file : pageUriOrFile,
 			callback : function(results){
 				if (!!results){
-					var error = results.messages[0];
-					w3cErrorDisplay.show(error);
+					results.messages.forEach(w3cErrorDisplay.show);
 				}
 			}
 		});
