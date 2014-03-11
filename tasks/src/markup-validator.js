@@ -2,9 +2,10 @@ var w3cValidator = require('w3cjs');
 
 var MarkupValidator = function(log){
 	this.validate = function(options, hasPassedCallback){
-		var pageValidationMonitor = new PageValidationMonitor(options.files, hasPassedCallback);
-		
-		options.files.forEach(function(pageUriOrFile){
+		var pageValidationMonitor = new PageValidationMonitor(options.pages, hasPassedCallback);
+
+		options.pages.forEach(function(pageUriOrFile){
+
 			var webpage = new Webpage(pageUriOrFile, log);
 			webpage.validate(pageValidationMonitor.notify);
 		});

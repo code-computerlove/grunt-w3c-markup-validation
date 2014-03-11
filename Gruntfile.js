@@ -37,9 +37,15 @@ module.exports = function(grunt) {
 			git_push: {
 				command: 'git push'
 			}
+		},
+		w3c_markup_validation : {
+			options : {
+				pages : ['http://www.google.com/']
+			}
 		}
 	});
 
+	grunt.registerTask('acceptance', ['w3c_markup_validation']);
 	grunt.registerTask('test', ['mochaTest','jshint']);
 	grunt.registerTask('default',['test','gitcommit', 'shell:git_push']);
 };

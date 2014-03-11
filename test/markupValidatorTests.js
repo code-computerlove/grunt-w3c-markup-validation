@@ -16,9 +16,9 @@ var rewire = require('rewire'),
 
 require('chai').should();
 
-test('When one file is validated Then w3c validation performed on file by name', function(done){
+test('When one page is validated Then w3c validation performed on page by name', function(done){
 	var fileName = 'random file ' + Math.random(),
-		oneFile = [fileName],
+		onePage = [fileName],
 		mockW3c = {
 			validate : function(options){
 				options.file.should.equal(fileName);
@@ -28,34 +28,33 @@ test('When one file is validated Then w3c validation performed on file by name',
 	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
 
 	new W3cMarkupValidationPlugin(new FakeLog()).validate({
-		files: oneFile
+		pages: onePage
 	}, fakeCallbackMethod);
 });
 
-test('When multiple files are validated Then w3c validation performed on each file by name', function(){
-	var firstFileName = 'random file ' + Math.random(),
-		secondFileName = 'another random ' + Math.random(),
-		multipleFiles = [firstFileName, secondFileName],
-		validatedFiles = [],
+test('When multiple pages are validated Then w3c validation performed on each page by name', function(){
+	var firstPageName = 'random file ' + Math.random(),
+		secondPageName = 'another random ' + Math.random(),
+		multiplePages = [firstPageName, secondPageName],
+		validatedPages = [],
 		mockW3c = {
 			validate : function(options){
-				validatedFiles.push(options.file);
+				validatedPages.push(options.file);
 				options.callback();
 			}
 		};
 	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
 
 	new W3cMarkupValidationPlugin(new FakeLog()).validate({
-		files: multipleFiles
+		pages: multiplePages
 	}, fakeCallbackMethod);
-	validatedFiles.should.eql(multipleFiles);
+	validatedPages.should.eql(multiplePages);
 });
 
-test('When invalid file is validated And one error Then error details are added to log', function(){
-	var fileName = 'random file ' + Math.random(),
+test('When invalid page is validated And one error Then error details are added to log', function(){
+	var invalidPageName = 'random file ' + Math.random(),
 		line = Math.random(),
 		message = 'an error ' + Math.random(),
-		oneFile = [fileName],
 		mockW3c = {
 			validate : function(options){
 				options.callback({
@@ -70,16 +69,15 @@ test('When invalid file is validated And one error Then error details are added 
 	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
 
 	new W3cMarkupValidationPlugin(fakeLog).validate({
-		files: oneFile
+		pages: [invalidPageName]
 	}, fakeCallbackMethod);
-	fakeLog.errors[0].should.equal(fileName + ' | line ' + line + ' | ' + message);
+	fakeLog.errors[0].should.equal(invalidPageName + ' | line ' + line + ' | ' + message);
 });
 
-test('When invalid file is validated And multiple errors Then error details are added to log', function(){
-	var fileName = 'random file ' + Math.random(),
+test('When invalid page is validated And multiple errors Then error details are added to log', function(){
+	var invalidPageName = 'random file ' + Math.random(),
 		line = Math.random(),
 		message = 'an error ' + Math.random(),
-		oneFile = [fileName],
 		error1 = {},
 		mockW3c = {
 			validate : function(options){
@@ -98,14 +96,13 @@ test('When invalid file is validated And multiple errors Then error details are 
 	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
 
 	new W3cMarkupValidationPlugin(fakeLog).validate({
-		files: oneFile
+		pages: [invalidPageName]
 	}, fakeCallbackMethod);
-	fakeLog.errors[1].should.equal(fileName + ' | line ' + line + ' | ' + message);
+	fakeLog.errors[1].should.equal(invalidPageName + ' | line ' + line + ' | ' + message);
 });
 
-test('When invalid file is validated And user wants task to fail on error Then task does not pass', function(done){
-	var oneFile = ['aFileName'],
-		mockW3c = {
+test('When invalid page is validated And user wants task to fail on error Then task does not pass', function(done){
+	var mockW3c = {
 			validate : function(options){
 				options.callback({
 					messages : [{}]
@@ -115,7 +112,7 @@ test('When invalid file is validated And user wants task to fail on error Then t
 	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
 
 	new W3cMarkupValidationPlugin(new FakeLog()).validate({
-		files: oneFile,
+		pages: ['aPage'],
 		validateOptions: {
 			failOnError : true
 		}
@@ -125,9 +122,8 @@ test('When invalid file is validated And user wants task to fail on error Then t
 	});
 });
 
-test('When valid file is validated Then task does pass', function(done){
-	var oneFile = ['aFileName'],
-		mockW3c = {
+test('When valid page is validated Then task does pass', function(done){
+	var mockW3c = {
 			validate : function(options){
 				options.callback();
 			}
@@ -135,7 +131,7 @@ test('When valid file is validated Then task does pass', function(done){
 	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
 
 	new W3cMarkupValidationPlugin(new FakeLog()).validate({
-		files: oneFile,
+		pages: ['aPage'],
 		validateOptions: {
 			failOnError : true
 		}
@@ -163,7 +159,7 @@ test('When valid and invalid file is validated And user wants task to fail on er
 	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
 
 	new W3cMarkupValidationPlugin(new FakeLog()).validate({
-		files: [invalidPage, validPage],
+		pages: [invalidPage, validPage],
 		validateOptions: {
 			failOnError : true
 		}
