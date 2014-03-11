@@ -11,7 +11,8 @@ var rewire = require('rewire'),
 		this.ok = function(ok){
 			this.oks.push(ok);
 		};
-	};
+	},
+	fakeCallbackMethod = function(){};
 
 require('chai').should();
 
@@ -28,7 +29,7 @@ test('When one file is validated Then w3c validation performed on file by name',
 
 	new W3cMarkupValidationPlugin(new FakeLog()).validate({
 		files: oneFile
-	});
+	}, fakeCallbackMethod);
 });
 
 test('When multiple files are validated Then w3c validation performed on each file by name', function(){
@@ -46,7 +47,7 @@ test('When multiple files are validated Then w3c validation performed on each fi
 
 	new W3cMarkupValidationPlugin(new FakeLog()).validate({
 		files: multipleFiles
-	});
+	}, fakeCallbackMethod);
 	validatedFiles.should.eql(multipleFiles);
 });
 
@@ -70,7 +71,7 @@ test('When invalid file is validated And one error Then error details are added 
 
 	new W3cMarkupValidationPlugin(fakeLog).validate({
 		files: oneFile
-	}, function(){});
+	}, fakeCallbackMethod);
 	fakeLog.errors[0].should.equal(fileName + ' | line ' + line + ' | ' + message);
 });
 
@@ -98,7 +99,7 @@ test('When invalid file is validated And multiple errors Then error details are 
 
 	new W3cMarkupValidationPlugin(fakeLog).validate({
 		files: oneFile
-	}, function(){});
+	}, fakeCallbackMethod);
 	fakeLog.errors[1].should.equal(fileName + ' | line ' + line + ' | ' + message);
 });
 
@@ -124,4 +125,23 @@ test('When invalid file is validated And user wants task to fail on error Then t
 	});
 });
 
+test('When valid file is validated Then task does pass', function(done){
+	var oneFile = ['aFileName'],
+		mockW3c = {
+			validate : function(options){
+				options.callback();
+			}
+		};
+	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
+
+	new W3cMarkupValidationPlugin(new FakeLog()).validate({
+		files: oneFile,
+		validateOptions: {
+			failOnError : true
+		}
+	}, function(passed){
+		passed.should.be.true;
+		done();
+	});
+});
 
