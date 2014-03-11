@@ -2,20 +2,24 @@ var w3cValidator = require('w3cjs');
 
 var MarkupValidator = function(log){
 	this.validate = function(options, hasPassedCallback){
-		var numberOfFiles = options.files.length;
+		var numberOfFiles = options.files.length,
+			completed = 0,
+			passedAllPages = true;
 		options.files.forEach(function(pageUriOrFile){
-			new WebPageMarkupValidator(pageUriOrFile, log).validate(function(success){
-				hasPassedCallback(success);
+			new Webpage(pageUriOrFile, log).validate(function(pagePassed){
+				completed++;
+				if (!pagePassed){
+					passedAllPages = false;
+				}
+				if (completed === numberOfFiles){
+					hasPassedCallback(passedAllPages);
+				}
 			});
 		});
 	};
-
-	function validatePage(pageUriOrFile){
-		new WebPageMarkupValidator(pageUriOrFile, log).validate();
-	}
 };
 
-var WebPageMarkupValidator = function(pageUriOrFile, log){
+var Webpage = function(pageUriOrFile, log){
 	var w3cErrorDisplay = new W3cErrorDisplay(log, pageUriOrFile);
 
 	this.validate = function(passed){

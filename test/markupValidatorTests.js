@@ -145,3 +145,31 @@ test('When valid file is validated Then task does pass', function(done){
 	});
 });
 
+test('When valid and invalid file is validated And user wants task to fail on error Then task does not pass', function(done){
+	var validPage = 'aValidPage',
+		invalidPage = 'anInvalidPage',
+		validPageResult,
+		invalidPageResult = {messages : [{}]},
+		pageValidationResults = {};
+
+	pageValidationResults[validPage] = validPageResult;
+	pageValidationResults[invalidPage] = invalidPageResult;
+
+	var	mockW3c = {
+			validate : function(options){
+				options.callback(pageValidationResults[options.file]);
+			}
+		};
+	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
+
+	new W3cMarkupValidationPlugin(new FakeLog()).validate({
+		files: [invalidPage, validPage],
+		validateOptions: {
+			failOnError : true
+		}
+	}, function(passed){
+		passed.should.be.false;
+		done();
+	});
+});
+
