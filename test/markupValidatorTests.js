@@ -113,9 +113,7 @@ test('When invalid page is validated And user wants task to fail on error Then t
 
 	new W3cMarkupValidationPlugin(new FakeLog()).validate({
 		pages: ['aPage'],
-		validateOptions: {
-			failOnError : true
-		}
+		failOnError : true
 	}, function(passed){
 		passed.should.be.false;
 		done();
@@ -132,9 +130,7 @@ test('When valid page is validated Then task does pass', function(done){
 
 	new W3cMarkupValidationPlugin(new FakeLog()).validate({
 		pages: ['aPage'],
-		validateOptions: {
-			failOnError : true
-		}
+		failOnError : true
 	}, function(passed){
 		passed.should.be.true;
 		done();
@@ -160,12 +156,48 @@ test('When valid and invalid file is validated And user wants task to fail on er
 
 	new W3cMarkupValidationPlugin(new FakeLog()).validate({
 		pages: [invalidPage, validPage],
-		validateOptions: {
-			failOnError : true
-		}
+		failOnError : true
 	}, function(passed){
 		passed.should.be.false;
 		done();
 	});
 });
+
+test('When invalid page is validated And user wants does not want task to fail on error Then task does pass', function(done){
+	var mockW3c = {
+			validate : function(options){
+				options.callback({
+					messages : [{}]
+				});
+			}
+		};
+	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
+
+	new W3cMarkupValidationPlugin(new FakeLog()).validate({
+		pages: ['aPage'],
+		failOnError : false
+	}, function(passed){
+		passed.should.be.true;
+		done();
+	});
+});
+
+test('When invalid page is validated And user wants does specify whether they want to fail on error Then task does not pass (default option)', function(done){
+	var mockW3c = {
+			validate : function(options){
+				options.callback({
+					messages : [{}]
+				});
+			}
+		};
+	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
+
+	new W3cMarkupValidationPlugin(new FakeLog()).validate({
+		pages: ['aPage']
+	}, function(passed){
+		passed.should.be.true;
+		done();
+	});
+});
+
 

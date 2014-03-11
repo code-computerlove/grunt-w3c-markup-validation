@@ -2,7 +2,7 @@ var w3cValidator = require('w3cjs');
 
 var MarkupValidator = function(log){
 	this.validate = function(options, hasPassedCallback){
-		var pageValidationMonitor = new PageValidationMonitor(options.pages, hasPassedCallback);
+		var pageValidationMonitor = new PageValidationMonitor(options.pages, options.failOnError, hasPassedCallback);
 		options.pages.forEach(function(pageUriOrFile){
 			var webpage = new Webpage(pageUriOrFile, log);
 			webpage.validate(pageValidationMonitor.notify);
@@ -10,13 +10,13 @@ var MarkupValidator = function(log){
 	};
 };
 
-var PageValidationMonitor = function(pages, hasPassedCallback){
+var PageValidationMonitor = function(pages, failOnError, hasPassedCallback){
 	var pageCount = pages.length,
 		passedAllPages = true;
 
 	this.notify = function(passed){
 		pageCount--;
-		if(!passed){
+		if(!passed && failOnError){
 			passedAllPages = false;
 		}
 		if(pageCount === 0){
