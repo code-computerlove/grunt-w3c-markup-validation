@@ -43,7 +43,7 @@ var Webpage = function(pageUriOrFile, log, pageW3cValidator){
 };
 
 var PageW3cValidator = function(ignore){
-	var ignoreErrors = !!ignore ? new RegExp(ignore.join('')) : new RegExp('');
+	var ignoreErrors = !!ignore ? new RegExp(ignore.join('|')) : new RegExp('');
 
 	this.validate = function(pageUriOrFile, callback){
 		w3cValidator.validate({

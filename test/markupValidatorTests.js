@@ -223,4 +223,27 @@ test('When invalid page is validated And user specifies they want to fail on err
 	});
 });
 
+test('When invalid page is validated And user specifies they want to fail on error But ignore multiple error messages including the one returned Then task does pass (default option)', function(done){
+	var errorToIgnore = 'an error',
+		mockW3c = {
+			validate : function(options){
+				options.callback({
+					messages : [{
+						message : errorToIgnore + ' ' + Math.random()
+					}]
+				});
+			}
+		};
+	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
+
+	new W3cMarkupValidationPlugin(new FakeLog()).validate({
+		pages: ['aPage'],
+		failOnError: true,
+		ignore : ['bob', errorToIgnore]
+	}, function(passed){
+		passed.should.be.true;
+		done();
+	});
+});
+
 
