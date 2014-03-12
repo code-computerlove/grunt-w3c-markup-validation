@@ -32,10 +32,10 @@ var Webpage = function(pageUriOrFile, log, pageW3cValidator){
 	var w3cErrorDisplay = new W3cErrorDisplay(log, pageUriOrFile);
 
 	this.validate = function(passed){
-		pageW3cValidator.validate(pageUriOrFile, function(results){
-			var hasPassed = results.length === 0;
+		pageW3cValidator.validate(pageUriOrFile, function(errors){
+			var hasPassed = errors.length === 0;
 			if (!hasPassed){
-				results.forEach(w3cErrorDisplay.show);
+				errors.forEach(w3cErrorDisplay.show);
 			}
 			passed(hasPassed);
 		});
