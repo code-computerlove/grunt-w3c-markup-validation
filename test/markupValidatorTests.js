@@ -182,7 +182,7 @@ test('When invalid page is validated And user wants does not want task to fail o
 	});
 });
 
-test('When invalid page is validated And user wants does specify whether they want to fail on error Then task does not pass (default option)', function(done){
+test('When invalid page is validated And user wants does specify whether they want to fail on error Then task does pass (default option)', function(done){
 	var mockW3c = {
 			validate : function(options){
 				options.callback({
@@ -194,6 +194,29 @@ test('When invalid page is validated And user wants does specify whether they wa
 
 	new W3cMarkupValidationPlugin(new FakeLog()).validate({
 		pages: ['aPage']
+	}, function(passed){
+		passed.should.be.true;
+		done();
+	});
+});
+
+test('When invalid page is validated And user specifies they want to fail on error But ignore the error message returned Then task does pass (default option)', function(done){
+	var errorToIgnore = 'an error',
+		mockW3c = {
+			validate : function(options){
+				options.callback({
+					messages : [{
+						message : errorToIgnore + ' ' + Math.random()
+					}]
+				});
+			}
+		};
+	W3cMarkupValidationPlugin.__set__("w3cValidator", mockW3c);
+
+	new W3cMarkupValidationPlugin(new FakeLog()).validate({
+		pages: ['aPage'],
+		failOnError: true,
+		ignore : [errorToIgnore]
 	}, function(passed){
 		passed.should.be.true;
 		done();

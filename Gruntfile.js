@@ -45,11 +45,16 @@ module.exports = function(grunt) {
 			fails : {
 				failOnError : false,
 				pages : ['./test-pages/fails.html']
+			},
+			passesAsIncludesIgnores : {
+				failOnError : true,
+				pages : ['./test-pages/fails.html'],
+				ignore : ['no document type delaration']
 			}
 		}
 	});
 
-	grunt.registerTask('acceptance', ['w3c_markup_validation:passes', 'w3c_markup_validation:fails']);
+	grunt.registerTask('acceptance', ['w3c_markup_validation:passes', 'w3c_markup_validation:fails', 'w3c_markup_validation:passesAsIncludesIgnores']);
 	grunt.registerTask('test', ['mochaTest','jshint', 'acceptance']);
 	grunt.registerTask('default',['test','gitcommit', 'shell:git_push']);
 };

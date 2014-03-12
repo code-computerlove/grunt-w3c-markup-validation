@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "Grunt task for W3C validation of markup ",
   "dependencies" : {
-    "w3cjs" : "*"
+    "w3cjs" : "0.1.24",
+    "underscore" : "1.6.0"
   },
   "devDependencies" : {
     "mocha" : "*",

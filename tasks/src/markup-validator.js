@@ -1,10 +1,13 @@
-var w3cValidator = require('w3cjs');
+var w3cValidator = require('w3cjs'),
+	_ = require('underscore');
 
 var MarkupValidator = function(log){
 	this.validate = function(options, hasPassedCallback){
-		var pageValidationMonitor = new PageValidationMonitor(options.pages, options.failOnError, hasPassedCallback);
+		var pageW3cValidator = new PageW3cValidator(options.ignore),
+			pageValidationMonitor = new PageValidationMonitor(options.pages, options.failOnError, hasPassedCallback);
+		
 		options.pages.forEach(function(pageUriOrFile){
-			var webpage = new Webpage(pageUriOrFile, log);
+			var webpage = new Webpage(pageUriOrFile, log, pageW3cValidator);
 			webpage.validate(pageValidationMonitor.notify);
 		});
 	};
@@ -25,18 +28,31 @@ var PageValidationMonitor = function(pages, failOnError, hasPassedCallback){
 	};
 };
 
-var Webpage = function(pageUriOrFile, log){
+var Webpage = function(pageUriOrFile, log, pageW3cValidator){
 	var w3cErrorDisplay = new W3cErrorDisplay(log, pageUriOrFile);
 
 	this.validate = function(passed){
+		pageW3cValidator.validate(pageUriOrFile, function(results){
+			var hasPassed = results.length === 0;
+			if (!hasPassed){
+				results.forEach(w3cErrorDisplay.show);
+			}
+			passed(hasPassed);
+		});
+	};
+};
+
+var PageW3cValidator = function(ignore){
+	var ignoreErrors = !!ignore ? new RegExp(ignore.join('')) : new RegExp('');
+
+	this.validate = function(pageUriOrFile, callback){
 		w3cValidator.validate({
 			file : pageUriOrFile,
 			callback : function(results){
-				var hasPassed = results.messages.length === 0;
-				if (!hasPassed){
-					results.messages.forEach(w3cErrorDisplay.show);
-				}
-				passed(hasPassed);
+				var groomedMessages = _.filter(results.messages, function(errorMessage){
+					return ignoreErrors.test(errorMessage);
+				});
+				callback(groomedMessages);
 			}
 		});
 	};
