@@ -49,7 +49,7 @@ module.exports = function(grunt) {
 			passesAsIncludesIgnores : {
 				failOnError : true,
 				pages : ['./test-pages/fails.html'],
-				ignore : ['no document type delaration']
+				ignore : ['no document type']
 			}
 		}
 	});

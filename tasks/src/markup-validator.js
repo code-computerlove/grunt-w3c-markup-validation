@@ -49,10 +49,15 @@ var PageW3cValidator = function(ignore){
 		w3cValidator.validate({
 			file : pageUriOrFile,
 			callback : function(results){
-				var groomedMessages = _.filter(results.messages, function(errorMessage){
-					return ignoreErrors.test(errorMessage);
-				});
-				callback(groomedMessages);
+				if (!!ignore){
+					var groomedMessages = _.filter(results.messages, function(errorMessage){
+						return !ignoreErrors.test(errorMessage.message);
+					});
+					callback(groomedMessages);
+				}
+				else {
+					callback(results.messages);
+				}
 			}
 		});
 	};
