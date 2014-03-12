@@ -29,7 +29,11 @@
   "engines": {
     "node": ">= 0.8.0"
   },
-  "author": "iainjmitchell",
+  "author": "code computerlove",
+  "contributors" : [{
+    "name": "Iain Mitchell",
+    "email": "iainjmitchell@gmail.com"
+  }],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/code-computerlove/grunt-w3c-markup-validation/issues"
