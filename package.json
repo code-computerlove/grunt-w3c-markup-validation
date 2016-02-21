@@ -2,19 +2,19 @@
   "name": "grunt-w3c-markup-validation",
   "version": "0.0.1",
   "description": "Grunt task for W3C validation of markup ",
-  "dependencies" : {
-    "w3cjs" : "0.1.24",
-    "underscore" : "1.6.0"
+  "dependencies": {
+    "w3cjs": "0.1.24",
+    "underscore": "1.6.0"
   },
-  "devDependencies" : {
-    "mocha" : "*",
-    "chai" : "*",
-    "rewire" : "*", 
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*",
+    "rewire": "*",
     "grunt-cli": "*",
-    "grunt-contrib-jshint" : "*",
-    "grunt-mocha-test" : "*",
-    "grunt-git" : "*",
-    "grunt-shell" : "*"
+    "grunt-contrib-jshint": "*",
+    "grunt-mocha-test": "*",
+    "grunt-git": "*",
+    "grunt-shell": "*"
   },
   "scripts": {
     "test": "./node_modules/grunt-cli/bin/grunt test"
@@ -24,23 +24,26 @@
     "url": "git://github.com/code-computerlove/grunt-w3c-markup-validation.git"
   },
   "keywords": [
-    "gruntplugin", "w3c"
+    "gruntplugin",
+    "w3c"
   ],
   "engines": {
     "node": ">= 0.8.0"
   },
   "author": "code computerlove",
-  "contributors" : [{
-    "name": "Iain Mitchell",
-    "email": "iainjmitchell@gmail.com"
-  }],
+  "contributors": [
+    {
+      "name": "Iain Mitchell",
+      "email": "iainjmitchell@gmail.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/code-computerlove/grunt-w3c-markup-validation/issues"
   },
   "homepage": "https://github.com/code-computerlove/grunt-w3c-markup-validation",
   "peerDependencies": {
-    "grunt": "~0.4.2"
+    "grunt": ">=0.4.0"
   },
   "files": [
     "tasks",
